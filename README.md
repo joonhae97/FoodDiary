@@ -1,5 +1,6 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
+## Food Diary Project
+본 프로젝트는 React 를 활용한 식단 관리 시스템(Food Diary Project)입니다.
 ## Available Scripts
 
 In the project directory, you can run:
