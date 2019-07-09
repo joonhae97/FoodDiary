@@ -18,7 +18,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import { withStyles } from '@material-ui/core/styles';
 import { returnStatement } from '@babel/types';
-import CustomerCarousel from './components/CustomerCarousel'
+import CustomerCarousel from './components/CustomerCarousel';
+import Drawer from './components/Drawer'
 import './App.css';
 
 
@@ -94,8 +95,16 @@ const styles = theme =>({
         width: 200,
       },
     },
-  }
+  },
+  list: {
+    width: 250,
+  },
+  fullList: {
+    width: 'auto',
+  },
 })
+
+
 
 class App extends Component {
 
@@ -104,7 +113,8 @@ class App extends Component {
     this.state ={
       customers : "",
       completed : 0,
-      searchKeyword:''
+      searchKeyword:'',
+      left : false
     }
   }
   stateRefresh =() =>{
@@ -152,7 +162,7 @@ class App extends Component {
         return <Customer stateRefresh ={this.stateRefresh} key = {c.id} id = {c.id} image ={c.image} name = {c.name} birthday={c.birthday} gender ={c.gender} job={c.job}/>
       });
     }
-    const cellList =["번호", "프로필 이미지", "이름", "생년월일", "성별", "직업", "설정"]
+    const cellList =["번호", "이미지", "음식 이름", "칼로리", "단백질", "지방", "설정"]
     const {classes} =this.props;
     return(
       <div>
@@ -165,7 +175,7 @@ class App extends Component {
             color="inherit"
             aria-label="Open drawer"
           >
-            <MenuIcon />
+            <Drawer color="inherit"/>
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
             나만의 식단일기
@@ -213,9 +223,7 @@ class App extends Component {
       </Paper>
       <br/>
       </div>
-        <div className = {classes.page}>
-        <CustomerCarousel/>
-        </div>
+        
       </div>
     );
   }

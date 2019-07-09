@@ -39,13 +39,12 @@ class CustomerDelete extends React.Component{
                 </DialogTitle>
                 <DialogContent>
                     <Typography gutterBottom>
-                        선택한 고객 정보가 삭제됩니다.
+                        선택한 식단 정보가 삭제됩니다.
                     </Typography>
                 </DialogContent>
                 <DialogActions>
                     <Button variant="contained" color = "primary" onClick = {(e) => {this.deleteCustomer(this.props.id)}}>삭제</Button>
                     <Button variant="outlined" color = "primary" onClick = {this.handleClose}>닫기</Button>
-
                 </DialogActions>
             </Dialog>
             </div>
