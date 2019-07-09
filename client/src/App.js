@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import Customer from './components/Customer'
 import CustomerAdd from './components/CustomerAdd'
-import Example from './components/Example'
-import './App.css';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
@@ -20,8 +18,16 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import { withStyles } from '@material-ui/core/styles';
 import { returnStatement } from '@babel/types';
+import CustomerCarousel from './components/CustomerCarousel'
+import './App.css';
+
 
 const styles = theme =>({
+  page:{
+    width : '480px',
+    marginLeft: 18,
+    marginRight :18
+  },
   root:{
     width : '100%',
     minWidth : 1080
@@ -135,6 +141,8 @@ class App extends Component {
     nextState[e.target.name] = e.target.value;
     this.setState(nextState);
   } 
+
+  
   render(){
     const filteredComponents =(data)=>{
       data = data.filter((c)=>{
@@ -147,8 +155,9 @@ class App extends Component {
     const cellList =["번호", "프로필 이미지", "이름", "생년월일", "성별", "직업", "설정"]
     const {classes} =this.props;
     return(
+      <div>
       <div className ={classes.root}>
-        <AppBar position="static">
+        <AppBar position="static" color = "secondary">
         <Toolbar>
           <IconButton
             edge="start"
@@ -159,7 +168,7 @@ class App extends Component {
             <MenuIcon />
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
-            고객 관리 시스템
+            나만의 식단일기
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
@@ -202,6 +211,11 @@ class App extends Component {
           </TableBody>  
         </Table>
       </Paper>
+      <br/>
+      </div>
+        <div className = {classes.page}>
+        <CustomerCarousel/>
+        </div>
       </div>
     );
   }

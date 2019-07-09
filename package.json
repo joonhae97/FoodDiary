@@ -16,6 +16,7 @@
         "react": "^16.8.6",
         "react-bootstrap": "^1.0.0-beta.9",
         "react-dom": "^16.8.6",
+        "react-slideshow-image": "^1.2.0",
         "reactstrap": "^8.0.0"
     },
     "devDependencies": {
