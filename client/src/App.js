@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Customer from './components/Customer'
 import CustomerAdd from './components/CustomerAdd'
+import CustomerGraph from './components/CustomerGraph';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
@@ -23,6 +24,7 @@ import Drawer from './components/Drawer';
 import PropTypes from 'prop-types';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import Grid from '@material-ui/core/Grid';
 import './App.css';
 
 
@@ -108,8 +110,9 @@ const styles = theme =>({
     width: 'auto',
   },
   carousel:{
-    width: '30%',
-    height : 200
+    width: '40%',
+    height : 200,
+    float : 'left'
   },
   recipe :{
     ...theme.typography.button,
@@ -180,23 +183,31 @@ class App extends Component {
 
   handleChange = (e) =>{
     const {tab} = this.state;
-    this.setState({tab : tab>=2? 0: tab + 1 });
+    this.setState({tab : tab>=1? 0: tab + 1 });
   }
 
   render(){
-    const filteredComponents =(data)=>{
+    const filteredComponents =(data,type)=>{
       data = data.filter((c)=>{
-        return c.name.indexOf(this.state.searchKeyword) >-1;
+        return c.FOOD.indexOf(this.state.searchKeyword) >-1;
       });
+      
       return data.map((c)=>{
-        return <Customer stateRefresh ={this.stateRefresh} key = {c.id} id = {c.id} image ={c.image} name = {c.name} birthday={c.birthday} gender ={c.gender} job={c.job}/>
-      });
+        if(type ===0){
+          if(c.isSelected ===1){
+        return <Customer stateRefresh ={this.stateRefresh} key = {c.ID} ID = {c.ID} FOOD ={c.FOOD} ENERC = {c.ENERC} CHOTDF={c.CHOTDF} PROCNP ={c.PROCNP} FAT={c.FAT}/>
+      }}
+        if(type ===1){
+          return <Customer stateRefresh ={this.stateRefresh} key = {c.ID} ID = {c.ID} FOOD ={c.FOOD} ENERC = {c.ENERC} CHOTDF={c.CHOTDF} PROCNP ={c.PROCNP} FAT={c.FAT}/>
+        }
+    });
+    
+      
     }
 
-    const cellList =["번호", "이미지", "음식 이름", "칼로리", "단백질", "지방", "설정"]
-    const cellList1 =["번호", "음식 이름", "칼로리", "탄수화물", "단백질", "지방", "설정"]
+    const cellList =["번호", "음식", "칼로리","탄수화물", "단백질", "지방", "추가","삭제"]
+    const cellList1 =["번호", "음식", "칼로리","탄수화물", "단백질", "지방", "추가", "삭제"]
     const {classes} =this.props;
-    const value = 0;
     return(
       <div>
       <div className ={classes.root}>
@@ -216,7 +227,6 @@ class App extends Component {
         <Tabs name = "tab" value = {this.state.tab} onChange={this.handleChange} >
             <Tab label="나의 식단 기록" />
             <Tab label="메뉴 리스트" />
-            <Tab label="추천 레시피" />
         </Tabs>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
@@ -241,30 +251,57 @@ class App extends Component {
       <div className ={classes.menu}>
           <CustomerAdd stateRefresh={this.stateRefresh}/>
       </div>
-      <Paper className = {classes.paper}>
-        <Table className = {classes.table}>
-          <TableHead>
-            <TableRow>
-              {cellList.map(c=>{
-                return <TableCell className ={classes.tableHead}>{c}</TableCell>
-              })}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {this.state.customers ? 
-              filteredComponents(this.state.customers) : 
-            <TableRow>
-              <TableCell colSpan= "6" align = "center">
-                <CircularProgress className = { classes.progress } variant = "determinate" value= {this.state.completed}/>
-              </TableCell>
-            </TableRow>}
-          </TableBody>  
-        </Table>
-      </Paper>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Paper className = {classes.paper}>
+            <Table className = {classes.table}>
+              <TableHead>
+                <TableRow>
+                  {cellList.map(c=>{
+                    return <TableCell className ={classes.tableHead}>{c}</TableCell>
+                  })}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {this.state.customers ? 
+                  filteredComponents(this.state.customers,0) : 
+                <TableRow>
+                  <TableCell colSpan= "7" align = "center">
+                    <CircularProgress className = { classes.progress } variant = "determinate" value= {this.state.completed}/>
+                  </TableCell>
+                </TableRow>}
+              </TableBody>  
+            </Table>
+          </Paper>
+      </Grid>
       <br/>
+      <Grid item xs={6}>
+        <CustomerGraph/>
+      </Grid>
+      <Grid item xs={6}>
+        <CustomerCarousel/>
+      </Grid>
+      </Grid>
+      
       </TabContainer>}
 
       {this.state.tab === 1 && <TabContainer>
+        <div className={classes.search}>
+            <div className={classes.searchIcon}>
+              <SearchIcon />
+            </div>
+            <InputBase 
+              placeholder="음식 찾기"
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+              name = "searchKeyword"
+              value = {this.state.searchKeyword}
+              onChange = {this.handleValueChange}
+              inputProps={{ 'aria-label': 'Search' }}
+            />
+          </div>
       <Paper className = {classes.paper}>
         <Table className = {classes.table}>
           <TableHead>
@@ -276,9 +313,9 @@ class App extends Component {
           </TableHead>
           <TableBody>
             {this.state.customers ? 
-              filteredComponents(this.state.customers) : 
+              filteredComponents(this.state.customers,1) : 
             <TableRow>
-              <TableCell colSpan= "7" align = "center">
+              <TableCell colSpan= "8" align = "center">
                 <CircularProgress className = { classes.progress } variant = "determinate" value= {this.state.completed}/>
               </TableCell>
             </TableRow>}
@@ -286,14 +323,6 @@ class App extends Component {
         </Table>
       </Paper>
       <br/>
-      </TabContainer>}
-
-      {this.state.tab === 2 && <TabContainer>
-        <div className={classes.recipe}>{"추천 레시피"}</div>
-        <br/>
-        <div className = {classes.carousel}>
-        <CustomerCarousel/>
-        </div>
       </TabContainer>}
       </div>
         

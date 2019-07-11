@@ -19,12 +19,11 @@ class CustomerAdd extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            file : null,
-            userName: '',
-            birthday : '',
-            gender : '',
-            job: '',
-            fileName : '',
+            FOOD: '',
+            ENERC : '',
+            CHOTDF : '',
+            PROCNP: '',
+            FAT : '',
             open :false
         }
     }
@@ -35,23 +34,23 @@ class CustomerAdd extends React.Component{
     }
     handleClose=()=>{
         this.setState({
-            file : null,
-            userName: '',
-            birthday : '',
-            gender : '',
-            job: '',
-            fileName : '',
+            FOOD: '',
+            ENERC : '',
+            CHOTDF : '',
+            PROCNP: '',
+            FAT : '',
             open :false
         })
     }
+
     addCustomer = () => {
         const url = '/api/customers';
         const formData = new FormData();
-        formData.append('image', this.state.file);
-        formData.append('name', this.state.userName);
-        formData.append('birthday', this.state.birthday);
-        formData.append('gender', this.state.gender);
-        formData.append('job', this.state.job);
+        formData.append('FOOD', this.state.FOOD);
+        formData.append('ENERC', this.state.ENERC);
+        formData.append('CHOTDF', this.state.CHOTDF);
+        formData.append('PROCNP', this.state.PROCNP);
+        formData.append('FAT', this.state.FAT);
         const config ={
             headers: {
                 'content-type' : 'multipart/form-data'
@@ -68,12 +67,11 @@ class CustomerAdd extends React.Component{
                 this.props.stateRefresh();
             })
         this.setState({
-            file: null,
-            userName : '',
-            birthday: '',
-            gender: '',
-            job: '',
-            fileName: '',
+            FOOD: '',
+            ENERC : '',
+            CHOTDF : '',
+            PROCNP: '',
+            FAT : '',
             open : false
         })
         this.props.stateRefresh();
@@ -97,22 +95,16 @@ class CustomerAdd extends React.Component{
         return (
             <div>
                 <Button variant = "contained" color = "secondary" onClick={this.handleClickOpen}>
-                    식단 추가하기
+                    직접 추가하기
                 </Button>
                 <Dialog open = {this.state.open} onClose ={this.handleClose}>
                     <DialogTitle>식단 추가</DialogTitle>
                     <DialogContent>
-                        <input className ={classes.hidden} accept = "image/*" id = "raised-button-file" type = "file" file = {this.state.file} value = {this.state.fileName} onChange = {this.handleFileChange}/><br/>
-                        <label htmlFor ="raised-button-file">
-                            <Button variant = "contained" color = "primary" component ="span" name = "file">
-                                {this.state.fileName ==="" ? "이미지 선택" : this.state.fileName} 
-                            </Button>
-                        </label>
-                        <br/>
-                        <TextField label = "음식이름" type = "text" name = "userName" value = {this.state.userName} onChange = {this.handleValueChange}/><br/>
-                        <TextField label = "칼로리" type = "text" name = "birthday" value = {this.state.birthday} onChange = {this.handleValueChange}/><br/>
-                        <TextField label = "단백질" type = "text" name = "gender" value = {this.state.gender} onChange = {this.handleValueChange}/><br/>
-                        <TextField label = "지방" type = "text" name = "job" value = {this.state.job} onChange = {this.handleValueChange}/><br/>
+                        <TextField label = "음식이름" type = "text" name = "FOOD" value = {this.state.FOOD} onChange = {this.handleValueChange}/><br/>
+                        <TextField label = "칼로리" type = "number" name = "ENERC" value = {this.state.ENERC} onChange = {this.handleValueChange}/><br/>
+                        <TextField label = "탄수화물" type = "number" name = "CHOTDF" value = {this.state.CHOTDF} onChange = {this.handleValueChange}/><br/>
+                        <TextField label = "단백질" type = "number" name = "PROCNP" value = {this.state.PROCNP} onChange = {this.handleValueChange}/><br/>
+                        <TextField label = "지방" type = "number" name = "FAT" value = {this.state.FAT} onChange = {this.handleValueChange}/><br/>
                     </DialogContent>
                     <DialogActions>
                         <Button variant = "contained" color = "primary" onClick ={this.handleFormSubmit}>추가</Button>
