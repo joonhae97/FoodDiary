@@ -94,7 +94,7 @@ class CustomerAdd extends React.Component{
         const {classes} = this.props;
         return (
             <div>
-                <Button variant = "contained" color = "primary" onClick={this.handleClickOpen}>
+                <Button variant = "contained" color = "secondary" onClick={this.handleClickOpen}>
                     식단 추가하기
                 </Button>
                 <Dialog open = {this.state.open} onClose ={this.handleClose}>

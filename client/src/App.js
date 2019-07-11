@@ -19,7 +19,10 @@ import SearchIcon from '@material-ui/icons/Search';
 import { withStyles } from '@material-ui/core/styles';
 import { returnStatement } from '@babel/types';
 import CustomerCarousel from './components/CustomerCarousel';
-import Drawer from './components/Drawer'
+import Drawer from './components/Drawer';
+import PropTypes from 'prop-types';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 import './App.css';
 
 
@@ -31,7 +34,9 @@ const styles = theme =>({
   },
   root:{
     width : '100%',
-    minWidth : 1080
+    minWidth : 1080,
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.paper,
   },
   tableHead:{
     fontSize : '1.0rem'
@@ -102,9 +107,29 @@ const styles = theme =>({
   fullList: {
     width: 'auto',
   },
+  carousel:{
+    width: '30%',
+    height : 200
+  },
+  recipe :{
+    ...theme.typography.button,
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(1),
+  }
 })
 
 
+function TabContainer(props) {
+  return (
+    <Typography component="div" style={{ padding: 8 * 3 }}>
+      {props.children}
+    </Typography>
+  );
+}
+
+TabContainer.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 class App extends Component {
 
@@ -114,15 +139,16 @@ class App extends Component {
       customers : "",
       completed : 0,
       searchKeyword:'',
-      left : false
+      left : false,
+      tab : 0
     }
   }
   stateRefresh =() =>{
     this.setState({
       customers: '',
       completed : 0,
-      searchKeyword:''
-    });
+      searchKeyword:'',
+      });
     this.callApi()
       .then(res => this.setState({customers:res}))
       .catch(err => console.log(err))
@@ -150,9 +176,13 @@ class App extends Component {
     let nextState ={};
     nextState[e.target.name] = e.target.value;
     this.setState(nextState);
-  } 
+  }
 
-  
+  handleChange = (e) =>{
+    const {tab} = this.state;
+    this.setState({tab : tab>=2? 0: tab + 1 });
+  }
+
   render(){
     const filteredComponents =(data)=>{
       data = data.filter((c)=>{
@@ -162,8 +192,11 @@ class App extends Component {
         return <Customer stateRefresh ={this.stateRefresh} key = {c.id} id = {c.id} image ={c.image} name = {c.name} birthday={c.birthday} gender ={c.gender} job={c.job}/>
       });
     }
+
     const cellList =["번호", "이미지", "음식 이름", "칼로리", "단백질", "지방", "설정"]
+    const cellList1 =["번호", "음식 이름", "칼로리", "탄수화물", "단백질", "지방", "설정"]
     const {classes} =this.props;
+    const value = 0;
     return(
       <div>
       <div className ={classes.root}>
@@ -180,6 +213,11 @@ class App extends Component {
           <Typography className={classes.title} variant="h6" noWrap>
             나만의 식단일기
           </Typography>
+        <Tabs name = "tab" value = {this.state.tab} onChange={this.handleChange} >
+            <Tab label="나의 식단 기록" />
+            <Tab label="메뉴 리스트" />
+            <Tab label="추천 레시피" />
+        </Tabs>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
@@ -198,6 +236,8 @@ class App extends Component {
           </div>
         </Toolbar>
       </AppBar>
+
+      {this.state.tab === 0 && <TabContainer>
       <div className ={classes.menu}>
           <CustomerAdd stateRefresh={this.stateRefresh}/>
       </div>
@@ -222,6 +262,39 @@ class App extends Component {
         </Table>
       </Paper>
       <br/>
+      </TabContainer>}
+
+      {this.state.tab === 1 && <TabContainer>
+      <Paper className = {classes.paper}>
+        <Table className = {classes.table}>
+          <TableHead>
+            <TableRow>
+              {cellList1.map(c=>{
+                return <TableCell className ={classes.tableHead}>{c}</TableCell>
+              })}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {this.state.customers ? 
+              filteredComponents(this.state.customers) : 
+            <TableRow>
+              <TableCell colSpan= "7" align = "center">
+                <CircularProgress className = { classes.progress } variant = "determinate" value= {this.state.completed}/>
+              </TableCell>
+            </TableRow>}
+          </TableBody>  
+        </Table>
+      </Paper>
+      <br/>
+      </TabContainer>}
+
+      {this.state.tab === 2 && <TabContainer>
+        <div className={classes.recipe}>{"추천 레시피"}</div>
+        <br/>
+        <div className = {classes.carousel}>
+        <CustomerCarousel/>
+        </div>
+      </TabContainer>}
       </div>
         
       </div>

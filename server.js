@@ -29,6 +29,7 @@ app.get('/api/customers', (req,res)=>{
         }
     );
 })
+
 app.use ('/image',express.static('./upload'));
 app.post('/api/customers',upload.single('image'),(req,res)=>{
     let sql = 'INSERT INTO CUSTOMER VALUES (null, ?,?,?,?,?, now(), 0)';
