@@ -85,11 +85,13 @@ class CustomerAdd extends React.Component{
             fileName : e.target.value
         })
     }
+
     handleValueChange =(e) => {
         let nextState = {};
         nextState[e.target.name] = e.target.value;
         this.setState(nextState);
     }
+    
     render(){
         const {classes} = this.props;
         return (
